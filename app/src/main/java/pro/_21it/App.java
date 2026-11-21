@@ -11,16 +11,7 @@ public final class App {
     public static void main(String[] args) {
         System.out.println(new App().getGreeting());
 
-        InMemoryOrderStore orderStore = new InMemoryOrderStore();
-        ConsoleNotificationSender notificationSender = new ConsoleNotificationSender();
-        ConsoleAuditWriter auditWriter = new ConsoleAuditWriter();
-            OrderService placementService = new OrderService(
-                orderStore,
-                notificationSender,
-                auditWriter
-        );
-
-        ScenarioRunner runner = new ScenarioRunner(placementService);
+        ScenarioRunner runner = new ContextFlowFactory().scenarioRunner();
         runner.run();
     }
 }
