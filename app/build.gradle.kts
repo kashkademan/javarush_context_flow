@@ -6,6 +6,8 @@
  */
 
 plugins {
+    // Базовая сборка Java-проекта (компиляция, тесты, jar)
+    java
     // Apply the application plugin to add support for building a CLI application in Java.
     application
 }
@@ -16,13 +18,26 @@ repositories {
 }
 
 dependencies {
-    // Use JUnit Jupiter for testing.
-    testImplementation(libs.junit.jupiter)
-
-    testRuntimeOnly("org.junit.platform:junit-platform-launcher")
-
     // This dependency is used by the application.
-    implementation(libs.guava)
+    // implementation(libs.guava)
+
+    // BOM фиксирует согласованные версии для экосистемы Spring
+    implementation(platform("org.springframework.boot:spring-boot-dependencies:4.0.3"))
+
+    // Базовый контейнер Spring (ApplicationContext и friends)
+    implementation("org.springframework:spring-context")
+    // Инфраструктура AOP (прокси, advisors и т.д.)
+    implementation("org.springframework:spring-aop")
+    // Spring Expression Language (SpEL)
+    implementation("org.springframework:spring-expression")
+
+    // Нужен в рантайме для части сценариев AOP
+    runtimeOnly("org.aspectj:aspectjweaver")
+
+    // Тестовая поддержка Spring-контекста (ApplicationContext в тестах и т.п.)
+    testImplementation("org.springframework:spring-test")
+    // JUnit Jupiter для тестов
+    testImplementation("org.junit.jupiter:junit-jupiter")
 }
 
 // Apply a specific Java toolchain to ease working on different environments.
@@ -37,7 +52,7 @@ application {
     mainClass = "pro._21it.App"
 }
 
-tasks.named<Test>("test") {
-    // Use JUnit Platform for unit tests.
-    useJUnitPlatform()
+tasks.withType<JavaCompile>().configureEach {
+    // Сохраняем имена параметров в байткоде (важно для DI/рефлексии/диагностики)
+    options.compilerArgs.add("-parameters")
 }

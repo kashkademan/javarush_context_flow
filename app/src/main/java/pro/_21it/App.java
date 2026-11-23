@@ -4,12 +4,8 @@
 package pro._21it;
 
 public final class App {
-    public String getGreeting() {
-        return "Hello World!";
-    }
-
     public static void main(String[] args) {
-        System.out.println(new App().getGreeting());
+        System.out.println("ContextFlow starting...");
 
         // Выбор реализаций (инфраструктура)
         OrderStore store = new InMemoryOrderStore();
