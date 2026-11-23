@@ -7,8 +7,8 @@ public final class CreateOrderCommand {
         this.customer = customer;
     }
 
-    public CreateOrderCommand(String name) {
-        this.customer = new Customer(name);
+    public CreateOrderCommand(String name, boolean isLoyal) {
+        this.customer = new Customer(name, isLoyal);
     }
 
     public Customer getCustomer() {

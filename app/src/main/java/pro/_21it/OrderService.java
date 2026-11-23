@@ -22,7 +22,7 @@ public class OrderService {
     }
 
     public Order placeOrder(CreateOrderCommand command) {
-        Order order = new Order(orderIdGenerator.nextId(), command.getCustomer());
+        Order order = new Order(orderIdGenerator.nextId(), command.getCustomer(), 100);
         Order savedOrder = orderStore.save(order);
         notificationSender.sendOrderCreate(savedOrder);
         auditWriter.writeOrderCreate(savedOrder);
