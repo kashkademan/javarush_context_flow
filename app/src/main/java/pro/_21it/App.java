@@ -11,7 +11,22 @@ public final class App {
     public static void main(String[] args) {
         System.out.println(new App().getGreeting());
 
-        ScenarioRunner runner = new ContextFlowFactory().scenarioRunner();
+        // Выбор реализаций (инфраструктура)
+        OrderStore store = new InMemoryOrderStore();
+        DiscountPolicy discountPolicy = new LoyalCustomerDiscountPolicy();
+        NotificationSender sender = new ConsoleNotificationSender();
+        AuditWriter auditWriter = new ConsoleAuditWriter();
+        OrderIdGenerator idGenerator = new DeterministicOrderIdGenerator();
+
+        OrderService orderService = new OrderService(
+                store,
+                discountPolicy,
+                sender,
+                auditWriter,
+                idGenerator
+        );
+
+        ScenarioRunner runner = new ScenarioRunner(orderService);
         runner.run();
     }
 }

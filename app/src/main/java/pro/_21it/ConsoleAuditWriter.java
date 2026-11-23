@@ -3,12 +3,7 @@ package pro._21it;
 public final class ConsoleAuditWriter implements AuditWriter {
 
     @Override
-    public void writeOrderCreate(Order order) {
-        System.out.println("[AUDIT] order created for " + order.getCustomer().getName());
-    }
-
-    @Override
-    public void writeOrderCancel(Order order) {
-        System.out.println("[AUDIT] order " + order.getId());
+    public void write(String message) {
+        System.out.println("[AUDIT] " + message);
     }
 }

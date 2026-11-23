@@ -8,12 +8,12 @@ public final class ScenarioRunner {
     }
 
     public void run() {
-        CreateOrderCommand createCommand = new CreateOrderCommand(new Customer("Alice", false));
-        Order order = orderService.placeOrder(createCommand);
-        System.out.println("order id: " + order.getId());
+        Customer customer = new Customer("C-1", "Алиса", LoyaltyLevel.GOLD);
+        CreateOrderCommand createCommand = new CreateOrderCommand(customer, 1000);
 
-        CancelOrderCommand cancelCommand = new CancelOrderCommand(order.getId());
+        Order order = orderService.placeOrder(createCommand);
+
+        CancelOrderCommand cancelCommand = new CancelOrderCommand(order.id());
         order = orderService.cancelOrder(cancelCommand);
-        System.out.println("order id: " + order.getId());
     }
 }

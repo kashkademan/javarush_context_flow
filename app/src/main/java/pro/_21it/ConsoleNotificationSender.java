@@ -3,8 +3,12 @@ package pro._21it;
 public final class ConsoleNotificationSender implements NotificationSender {
 
     @Override
-    public void sendOrderCreate(Order order) {
-        System.out.println("[NOTIFY] order created for " + order.getCustomer().getName());
-        System.out.println("[NOTIFY] order created with id " + order.getId());
+    public void sendOrderCreated(Order order) {
+        System.out.println("[NOTIFY] Order created: " + order.id());
+    }
+
+    @Override
+    public void sendOrderCanceled(Order order) {
+        System.out.println("[NOTIFY] Order canceled: " + order.id());
     }
 }

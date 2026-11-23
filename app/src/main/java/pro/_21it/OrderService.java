@@ -22,17 +22,25 @@ public class OrderService {
     }
 
     public Order placeOrder(CreateOrderCommand command) {
-        Order order = new Order(orderIdGenerator.nextId(), command.getCustomer(), 100);
-        Order savedOrder = orderStore.save(order);
-        notificationSender.sendOrderCreate(savedOrder);
-        auditWriter.writeOrderCreate(savedOrder);
-        return savedOrder;
+        String id = orderIdGenerator.nextId();
+
+        int discount = discountPolicy.discountFor(command.customer(), command.totalAmount());
+        int finalTotal = command.totalAmount() - discount;
+
+        Order order = new Order(id, command.customer(), finalTotal, OrderStatus.NEW);
+
+        orderStore.save(order);
+        notificationSender.sendOrderCreated(order);
+        auditWriter.write("created " + id + ", finalTotal=" + finalTotal);
+
+        return order;
     }
 
     public Order cancelOrder(CancelOrderCommand command) {
         Order order = orderStore.getById(command.getOrderId()).orElseThrow();
-        Order savedOrder = orderStore.save(order);
-        auditWriter.writeOrderCancel(savedOrder);
-        return savedOrder;
+        orderStore.save(order);
+        notificationSender.sendOrderCanceled(order);
+        auditWriter.write("Order " + order.id() + " was canceled.");
+        return order;
     }
 }

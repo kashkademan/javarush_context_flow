@@ -4,7 +4,7 @@ import java.util.Optional;
 
 interface OrderStore {
 
-    Order save(Order order);
+    void save(Order order);
 
     Optional<Order> getById(String orderId);
 }
